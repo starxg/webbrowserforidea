@@ -1,17 +1,12 @@
 <idea-plugin>
   <id>com.starxg.browserfx</id>
-  <name>Embedded Web Browser for IDEA</name>
+  <name>Embedded Web Browser</name>
   <version>1.0.0</version>
-  <vendor email="591269@gmail.com" url="http://github.com/chocotan/webbrowser4idea">chocotan</vendor>
+  <vendor email="591269@gmail.com" url="https://github.com/starxg/webbrowserforidea">starxg</vendor>
 
   <description><![CDATA[
       Embedded Web Browser for IDEA
     ]]></description>
-
-  <change-notes><![CDATA[
-      1. Ignore untrusted ssl certificates
-    ]]>
-  </change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
   <idea-version since-build="173.0"/>
