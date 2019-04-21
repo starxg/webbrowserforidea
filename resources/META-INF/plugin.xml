@@ -1,0 +1,41 @@
+<idea-plugin>
+  <id>com.starxg.browserfx</id>
+  <name>Embedded Web Browser for IDEA</name>
+  <version>1.0.0</version>
+  <vendor email="591269@gmail.com" url="http://github.com/chocotan/webbrowser4idea">chocotan</vendor>
+
+  <description><![CDATA[
+      Embedded Web Browser for IDEA
+    ]]></description>
+
+  <change-notes><![CDATA[
+      1. Ignore untrusted ssl certificates
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="173.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products -->
+  <depends>com.intellij.modules.lang</depends>
+
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+    <toolWindow id="Embedded Web Browser" anchor="right" factoryClass="com.starxg.browserfx.BrowserWindowFactory"/>
+  </extensions>
+
+  <application-components>
+    <!-- Add your application components here -->
+
+  </application-components>
+
+  <actions>
+    <!-- Add your actions here -->
+
+  </actions>
+
+
+</idea-plugin>
