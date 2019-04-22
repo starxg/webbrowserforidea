@@ -1,7 +1,6 @@
 package com.starxg.browserfx;
 
 import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
@@ -22,7 +21,6 @@ public class JavaFxBrowser implements BrowserView {
 	private WebView browser;
 	private WebEngine webEngine;
 	private JFXPanel jfxPanel;
-	private int index;
 
 	public JavaFxBrowser() {
 		jfxPanel = new JFXPanel();
@@ -34,11 +32,6 @@ public class JavaFxBrowser implements BrowserView {
 			borderPane.setCenter(browser);
 			Scene scene = new Scene(borderPane);
 			jfxPanel.setScene(scene);
-			webEngine.getHistory().getEntries().addListener((ListChangeListener<WebHistory.Entry>) c -> {
-				c.next();
-				index = c.getAddedSize();
-			});
-
 		});
 	}
 
