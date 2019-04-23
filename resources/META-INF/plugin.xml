@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.starxg.browserfx</id>
   <name>Embedded Web Browser</name>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
   <vendor email="591269@gmail.com" url="https://github.com/starxg/webbrowserforidea">starxg</vendor>
 
   <description><![CDATA[
