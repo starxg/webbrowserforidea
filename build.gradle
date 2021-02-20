@@ -30,6 +30,9 @@ intellij {
 
 patchPluginXml {
     changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+<ol>
+<li>fix some bugs</li>
+<li>add the <a href='https://github.com/Tencent/vConsole'>vConsole</a></li>
+</ol>
+      """
 }

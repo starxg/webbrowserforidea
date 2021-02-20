@@ -9,11 +9,6 @@
      <img width="300" height="163" src="https://raw.githubusercontent.com/starxg/webbrowserforidea/master/images/1.png" alt="Introduce Image" />
     ]]></description>
 
-    <change-notes><![CDATA[
-      1. Add forward and back buttons
-    ]]>
-    </change-notes>
-
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="173.0"/>
 
@@ -24,7 +19,6 @@
 
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
         <toolWindow id="Embedded Web Browser" anchor="right" factoryClass="com.starxg.browserfx.BrowserWindowFactory"/>
     </extensions>
 

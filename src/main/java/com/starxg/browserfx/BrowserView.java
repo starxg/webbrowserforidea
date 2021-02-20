@@ -1,7 +1,11 @@
 package com.starxg.browserfx;
 
+import javafx.util.Callback;
+
 import javax.swing.*;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * 浏览器接口
@@ -27,11 +31,51 @@ public interface BrowserView {
 
     /**
      * url改变通知
+     *
+     * @param consumer
+     *            consumer
+     */
+    void onUrlChange(Consumer<String> consumer);
+
+    /**
+     * 页面报错通知
+     *
+     * @param consumer
+     *            consumer
+     */
+    void onLoadError(Consumer<Throwable> consumer);
+
+    /**
+     * alert
      * 
      * @param consumer
      *            consumer
      */
-    void urlChange(Consumer<String> consumer);
+    void onAlert(Consumer<String> consumer);
+
+    /**
+     * confirm
+     * 
+     * @param callback
+     *            callback
+     */
+    void onConfirm(Callback<String, Boolean> callback);
+
+    /**
+     * prompt
+     * 
+     * @param callback
+     *            callback
+     */
+    void onPrompt(BiFunction<String, String, String> callback);
+
+    /**
+     * 进度条改变通知
+     * 
+     * @param consumer
+     *            consumer
+     */
+    void onProgressChange(Consumer<Double> consumer);
 
     /**
      * 后退
@@ -44,17 +88,17 @@ public interface BrowserView {
     void forward();
 
     /**
-     * 是否有下一页
+     * 是否可以后退
      * 
-     * @return true：有
+     * @return true：可以
      */
-    boolean isNext();
+    boolean canBack();
 
     /**
-     * 是否有上一页
+     * 是否可以前进
      * 
-     * @return true：有
+     * @return true：可以
      */
-    boolean isPrev();
+    boolean canForward();
 
 }
