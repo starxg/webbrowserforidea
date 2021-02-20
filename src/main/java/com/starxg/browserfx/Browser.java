@@ -1,6 +1,7 @@
 package com.starxg.browserfx;
 
 import com.intellij.util.ui.JBUI;
+import com.shopobot.util.URL;
 
 import javax.swing.*;
 import java.awt.*;
@@ -106,7 +107,7 @@ class Browser extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER && txtUrl.getText().trim().length() > 0) {
-                    webView.load(txtUrl.getText());
+                    webView.load(URL.get(txtUrl.getText()).toJavaURL().toString());
                 }
             }
 
