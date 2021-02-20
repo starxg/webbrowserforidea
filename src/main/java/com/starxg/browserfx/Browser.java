@@ -72,11 +72,9 @@ class Browser extends JPanel {
 
         webView.onUrlChange(s -> {
             this.txtUrl.setText(s);
-            this.btnBack.setEnabled(webView.canForward());
-            this.btnForward.setEnabled(webView.canBack());
+//            this.btnBack.setEnabled(webView.canForward());
+//            this.btnForward.setEnabled(webView.canBack());
         });
-
-        webView.onLoadError(e -> progressBar.setVisible(false));
 
         webView.onProgressChange(e -> {
             progressBar.setVisible(e != 1.0);
