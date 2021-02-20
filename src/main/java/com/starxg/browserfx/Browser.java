@@ -1,28 +1,26 @@
 package com.starxg.browserfx;
 
 import com.intellij.util.ui.JBUI;
-import javafx.scene.input.KeyCode;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 /**
  * 主面板
+ * 
  * @author huangxingguang
  * @date 2019-04-21 13:53
  */
-public class Browser extends JPanel {
+class Browser extends JPanel {
     private BrowserView webView;
     private JButton btnBack;
     private JButton btnForward;
     private JTextField txtUrl;
     private JButton btnGo;
 
-    public Browser(BrowserView webView) {
+    Browser(BrowserView webView) {
         this.webView = webView;
         this.initView();
         this.initEvent();
@@ -30,10 +28,10 @@ public class Browser extends JPanel {
 
     private void initView() {
         GridBagLayout gridBagLayout = new GridBagLayout();
-        gridBagLayout.columnWidths = new int[]{0, 20, 0, 0, 0};
-        gridBagLayout.rowHeights = new int[]{0, 0, 0};
-        gridBagLayout.columnWeights = new double[]{0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
-        gridBagLayout.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+        gridBagLayout.columnWidths = new int[] { 0, 20, 0, 0, 0 };
+        gridBagLayout.rowHeights = new int[] { 0, 0, 0 };
+        gridBagLayout.columnWeights = new double[] { 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
+        gridBagLayout.rowWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
         setLayout(gridBagLayout);
 
         btnBack = new JButton("<");
