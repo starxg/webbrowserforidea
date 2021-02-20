@@ -65,7 +65,14 @@ class Browser extends JPanel {
     private void initEvent() {
         btnGo.addActionListener(e -> load(txtUrl.getText()));
 
-        webView.onUrlChange(s -> swingInvokeLater(() -> this.txtUrl.setText(s)));
+        webView.onUrlChange(s -> swingInvokeLater(() -> {
+            txtUrl.setText(s);
+
+            // 没有获取焦点的时候光标回到0
+            if (!txtUrl.isFocusOwner()) {
+                txtUrl.setCaretPosition(0);
+            }
+        }));
 
         webView.onProgressChange(e -> swingInvokeLater(() -> {
             progressBar.setVisible(e != 1.0 && e != 0);
