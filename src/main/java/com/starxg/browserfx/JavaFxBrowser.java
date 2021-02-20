@@ -134,7 +134,7 @@ class JavaFxBrowser implements BrowserView {
         }
         WebView webView = new WebView();
         WebEngine webEngine = webView.getEngine();
-        webEngine.getLoadWorker().progressProperty().addListener((observable, oldValue, newValue) -> {
+       /* webEngine.getLoadWorker().progressProperty().addListener((observable, oldValue, newValue) -> {
             if (Objects.nonNull(progressChangedConsumer)) {
                 progressChangedConsumer.accept(newValue.doubleValue());
             }
@@ -171,7 +171,7 @@ class JavaFxBrowser implements BrowserView {
                 return null;
             }
             return promptCallback.apply(e.getMessage(), e.getDefaultValue());
-        });
+        });*/
 
         return webView;
     }
