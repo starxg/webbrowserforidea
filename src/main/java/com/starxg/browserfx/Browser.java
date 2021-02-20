@@ -55,6 +55,7 @@ class Browser extends JPanel {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         progressBar = new JProgressBar(0, 100);
+        progressBar.setVisible(false);
         progressBar.setPreferredSize(new Dimension(0, 5));
         panel.add(progressBar, BorderLayout.NORTH);
         panel.add(webView.getBrowser(), BorderLayout.CENTER);
@@ -67,14 +68,14 @@ class Browser extends JPanel {
         webView.onUrlChange(s -> swingInvokeLater(() -> this.txtUrl.setText(s)));
 
         webView.onProgressChange(e -> swingInvokeLater(() -> {
-            progressBar.setVisible(e != 1.0);
+            progressBar.setVisible(e != 1.0 && e != 0);
             progressBar.setValue((int) (e * 100));
         }));
 
         webView.onAlert(e -> {
             final Object key = new Object();
             ApplicationManager.getApplication().invokeLater(() -> {
-                Messages.showDialog(String.valueOf(e), txtUrl.getText(), new String[] { "OK" }, 0, null);
+                Messages.showMessageDialog(String.valueOf(e), txtUrl.getText(), null);
                 Platform.runLater(() -> Toolkit.getToolkit().exitNestedEventLoop(key, null));
             });
             Toolkit.getToolkit().enterNestedEventLoop(key);
