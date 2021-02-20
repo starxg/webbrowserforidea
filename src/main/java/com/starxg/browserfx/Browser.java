@@ -21,8 +21,6 @@ import javafx.application.Platform;
  */
 class Browser extends JPanel {
     private BrowserView webView;
-    private JButton btnBack;
-    private JButton btnForward;
     private JTextField txtUrl;
     private JButton btnGo;
     private JProgressBar progressBar;
@@ -42,8 +40,6 @@ class Browser extends JPanel {
     private JPanel topControls() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
-        panel.add(btnBack = new ControlButton("<"));
-        panel.add(btnForward = new ControlButton(">"));
         panel.add(txtUrl = new JTextField(), new GridBagConstraints() {
             {
                 weightx = 1;
@@ -68,11 +64,7 @@ class Browser extends JPanel {
     private void initEvent() {
         btnGo.addActionListener(e -> load(txtUrl.getText()));
 
-        webView.onUrlChange(s -> swingInvokeLater(() -> {
-            this.txtUrl.setText(s);
-            this.btnBack.setEnabled(webView.canForward());
-            this.btnForward.setEnabled(webView.canBack());
-        }));
+        webView.onUrlChange(s -> swingInvokeLater(() -> this.txtUrl.setText(s)));
 
         webView.onProgressChange(e -> swingInvokeLater(() -> {
             progressBar.setVisible(e != 1.0);
@@ -108,8 +100,6 @@ class Browser extends JPanel {
             return (String) Toolkit.getToolkit().enterNestedEventLoop(key);
         });
 
-        btnBack.addActionListener(e -> webView.back());
-        btnForward.addActionListener(e -> webView.forward());
         txtUrl.setText("http://127.0.0.1:8080");
         txtUrl.addKeyListener(new KeyListener() {
             @Override
