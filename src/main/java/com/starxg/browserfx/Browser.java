@@ -3,16 +3,15 @@ package com.starxg.browserfx;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.concurrent.CountDownLatch;
 
 import javax.swing.*;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.ui.Messages;
 import com.shopobot.util.URL;
+import com.sun.javafx.tk.Toolkit;
 
-import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.application.Platform;
 
 /**
  * 主面板
@@ -60,8 +59,7 @@ class Browser extends JPanel {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         progressBar = new JProgressBar(0, 100);
-        progressBar.setVisible(true);
-        progressBar.setPreferredSize(new Dimension(0, 2));
+        progressBar.setPreferredSize(new Dimension(0, 5));
         panel.add(progressBar, BorderLayout.NORTH);
         panel.add(webView.getBrowser(), BorderLayout.CENTER);
         return panel;
@@ -70,51 +68,44 @@ class Browser extends JPanel {
     private void initEvent() {
         btnGo.addActionListener(e -> load(txtUrl.getText()));
 
-        webView.onUrlChange(s -> {
+        webView.onUrlChange(s -> swingInvokeLater(() -> {
             this.txtUrl.setText(s);
-//            this.btnBack.setEnabled(webView.canForward());
-//            this.btnForward.setEnabled(webView.canBack());
-        });
+            this.btnBack.setEnabled(webView.canForward());
+            this.btnForward.setEnabled(webView.canBack());
+        }));
 
-        webView.onProgressChange(e -> {
+        webView.onProgressChange(e -> swingInvokeLater(() -> {
             progressBar.setVisible(e != 1.0);
             progressBar.setValue((int) (e * 100));
+        }));
+
+        webView.onAlert(e -> {
+            final Object key = new Object();
+            ApplicationManager.getApplication().invokeLater(() -> {
+                Messages.showDialog(String.valueOf(e), txtUrl.getText(), new String[] { "OK" }, 0, null);
+                Platform.runLater(() -> Toolkit.getToolkit().exitNestedEventLoop(key, null));
+            });
+            Toolkit.getToolkit().enterNestedEventLoop(key);
         });
 
-        webView.onAlert(
-                e -> ApplicationManager.getApplication().invokeLater(() -> Messages.showDialog(String.valueOf(e),
-                        txtUrl.getText(), new String[] { "OK" }, 0, Messages.getInformationIcon())));
-
         webView.onConfirm(e -> {
-            ReadOnlyBooleanWrapper wrapper = new ReadOnlyBooleanWrapper(false);
-            try {
-                CountDownLatch latch = new CountDownLatch(1);
-                ApplicationManager.getApplication().invokeLater(() -> {
-                    wrapper.set(Messages.OK == Messages.showOkCancelDialog(String.valueOf(e), txtUrl.getText(),
-                            Messages.getInformationIcon()));
-                    latch.countDown();
-                });
-                latch.await();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            return wrapper.get();
+            final Object key = new Object();
+            ApplicationManager.getApplication().invokeLater(() -> {
+                final boolean result = Messages.OK == Messages.showOkCancelDialog(String.valueOf(e), txtUrl.getText(),
+                        null);
+                Platform.runLater(() -> Toolkit.getToolkit().exitNestedEventLoop(key, result));
+            });
+            return (Boolean) Toolkit.getToolkit().enterNestedEventLoop(key);
         });
 
         webView.onPrompt((msg, defaultValue) -> {
-            ReadOnlyStringWrapper wrapper = new ReadOnlyStringWrapper(null);
-            try {
-                CountDownLatch latch = new CountDownLatch(1);
-                ApplicationManager.getApplication().invokeLater(() -> {
-                    wrapper.set(
-                            Messages.showInputDialog(String.valueOf(msg), txtUrl.getText(), null, defaultValue, null));
-                    latch.countDown();
-                });
-                latch.await();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            return wrapper.get();
+            final Object key = new Object();
+            ApplicationManager.getApplication().invokeLater(() -> {
+                final String result = Messages.showInputDialog(String.valueOf(msg), txtUrl.getText(), null,
+                        defaultValue, null);
+                Platform.runLater(() -> Toolkit.getToolkit().exitNestedEventLoop(key, result));
+            });
+            return (String) Toolkit.getToolkit().enterNestedEventLoop(key);
         });
 
         btnBack.addActionListener(e -> webView.back());
@@ -144,7 +135,7 @@ class Browser extends JPanel {
         if (txtUrl.getText().trim().length() < 1) {
             return;
         }
-        webView.load(URL.get(url).toJavaURL().toString());
+        swingInvokeLater(() -> webView.load(URL.get(url).toJavaURL().toString()));
     }
 
     private static final class ControlButton extends JButton {
@@ -153,6 +144,14 @@ class Browser extends JPanel {
             setMaximumSize(new Dimension(40, 25));
             setMinimumSize(new Dimension(40, 25));
             setPreferredSize(new Dimension(40, 25));
+        }
+    }
+
+    private void swingInvokeLater(Runnable runnable) {
+        if (SwingUtilities.isEventDispatchThread()) {
+            runnable.run();
+        } else {
+            SwingUtilities.invokeLater(runnable);
         }
     }
 }

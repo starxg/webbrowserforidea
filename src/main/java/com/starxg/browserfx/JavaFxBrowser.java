@@ -29,7 +29,6 @@ class JavaFxBrowser implements BrowserView {
     private JFXPanel jfxPanel;
     private Consumer<Double> progressChangedConsumer;
     private Consumer<String> urlChangedConsumer;
-    private Consumer<Throwable> loadErrorConsumer;
     private Consumer<String> alertConsumer;
     private Callback<String, Boolean> confirmCallback;
     private BiFunction<String, String, String> promptCallback;
@@ -69,11 +68,6 @@ class JavaFxBrowser implements BrowserView {
     @Override
     public void onUrlChange(Consumer<String> consumer) {
         urlChangedConsumer = Objects.requireNonNull(consumer, "consumer");
-    }
-
-    @Override
-    public void onLoadError(Consumer<Throwable> consumer) {
-        loadErrorConsumer = Objects.requireNonNull(consumer, "consumer");
     }
 
     @Override
@@ -134,7 +128,7 @@ class JavaFxBrowser implements BrowserView {
         }
         WebView webView = new WebView();
         WebEngine webEngine = webView.getEngine();
-       /* webEngine.getLoadWorker().progressProperty().addListener((observable, oldValue, newValue) -> {
+        webEngine.getLoadWorker().progressProperty().addListener((observable, oldValue, newValue) -> {
             if (Objects.nonNull(progressChangedConsumer)) {
                 progressChangedConsumer.accept(newValue.doubleValue());
             }
@@ -144,12 +138,6 @@ class JavaFxBrowser implements BrowserView {
         webEngine.locationProperty().addListener((observable, oldValue, newValue) -> {
             if (Objects.nonNull(urlChangedConsumer)) {
                 urlChangedConsumer.accept(webEngine.getLocation());
-            }
-        });
-
-        webEngine.setOnError(event -> {
-            if (Objects.nonNull(loadErrorConsumer)) {
-                loadErrorConsumer.accept(event.getException());
             }
         });
 
@@ -171,7 +159,7 @@ class JavaFxBrowser implements BrowserView {
                 return null;
             }
             return promptCallback.apply(e.getMessage(), e.getDefaultValue());
-        });*/
+        });
 
         return webView;
     }

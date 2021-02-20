@@ -38,14 +38,6 @@ public interface BrowserView {
     void onUrlChange(Consumer<String> consumer);
 
     /**
-     * 页面报错通知
-     *
-     * @param consumer
-     *            consumer
-     */
-    void onLoadError(Consumer<Throwable> consumer);
-
-    /**
      * alert
      * 
      * @param consumer

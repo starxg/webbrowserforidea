@@ -8,15 +8,14 @@ version '1.0.5'
 
 sourceCompatibility = 1.8
 
-allprojects {
-    repositories {
-        maven { url 'https://maven.aliyun.com/repository/public/' }
-        maven { url 'https://maven.aliyun.com/repository/google/' }
-        maven { url 'https://maven.aliyun.com/repository/jcenter/'}
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin'}
-        maven { url 'https://jitpack.io' }
-        //    mavenCentral()
-    }
+repositories {
+    maven { url 'https://maven.aliyun.com/repository/central/'}
+    maven { url 'https://maven.aliyun.com/repository/public/' }
+    maven { url 'https://maven.aliyun.com/repository/google/' }
+    maven { url 'https://maven.aliyun.com/repository/jcenter/'}
+    maven { url 'https://maven.aliyun.com/repository/gradle-plugin'}
+    maven { url 'https://jitpack.io' }
+    //    mavenCentral()
 }
 
 dependencies {
