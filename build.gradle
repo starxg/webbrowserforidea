@@ -34,7 +34,7 @@ patchPluginXml {
     changeNotes """
 <ol>
 <li>support jcef</li>
-<li>add <a href='https://github.com/Tencent/vConsole'>vConsole</a></li>
+<li>170.* - 202.2.* add <a href='https://github.com/Tencent/vConsole'>vConsole</a></li>
 <li>fix some bugs</li>
 </ol>
       """

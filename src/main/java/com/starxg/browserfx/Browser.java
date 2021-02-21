@@ -88,7 +88,7 @@ class Browser extends JPanel {
             progressBar.setValue((int) (e * 100));
         }));
 
-        txtUrl.setText("http://127.0.0.1:8080");
+        // txtUrl.setText("http://127.0.0.1:8080");
         txtUrl.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
