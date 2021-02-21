@@ -27,14 +27,7 @@ public class BrowserWindowFactory implements ToolWindowFactory {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        BrowserView browserView;
-        if (isSupportedJBCef()) {
-            browserView = new JcefBrowser();
-        } else {
-            browserView = new JavaFxBrowser();
-        }
-        System.out.println(isSupportedJBCef());
-        Content content = contentFactory.createContent(new Browser(browserView), "", false);
+        Content content = contentFactory.createContent(new Browser(getBrowser()), "", false);
         toolWindow.getContentManager().addContent(content);
     }
 
@@ -46,5 +39,16 @@ public class BrowserWindowFactory implements ToolWindowFactory {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    private BrowserView getBrowser() {
+        try {
+            if (isSupportedJBCef()) {
+                return (BrowserView) Class.forName("com.starxg.browserfx.JcefBrowser").newInstance();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new JavaFxBrowser();
     }
 }
