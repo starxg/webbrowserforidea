@@ -37,14 +37,14 @@ class Browser extends JPanel {
     private JPanel topControls() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
-        if (webView.type() == BrowserView.Type.JAVAFX) {
-            panel.add(new ControlButton("DevTools") {
-                {
-                    addActionListener(e -> webView.openDevTools());
-                    setToolTipText("DevTools");
-                }
-            });
-        }
+//        if (webView.type() == BrowserView.Type.JAVAFX) {
+//            panel.add(new ControlButton("DevTools") {
+//                {
+//                    addActionListener(e -> webView.openDevTools());
+//                    setToolTipText("DevTools");
+//                }
+//            });
+//        }
         panel.add(txtUrl = new JTextField(), new GridBagConstraints() {
             {
                 weightx = 1;
