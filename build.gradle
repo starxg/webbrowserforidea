@@ -30,7 +30,6 @@ intellij {
 
 patchPluginXml {
     sinceBuild("173")
-    untilBuild("202.*")
     changeNotes """
 <ol>
 <li>support jcef</li>
