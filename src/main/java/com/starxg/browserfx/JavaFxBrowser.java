@@ -6,6 +6,8 @@ import java.util.function.Consumer;
 
 import javax.swing.*;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.ui.Messages;
 import com.sun.javafx.tk.Toolkit;
@@ -18,7 +20,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * javafx浏览器

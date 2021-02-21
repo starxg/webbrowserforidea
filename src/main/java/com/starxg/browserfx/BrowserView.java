@@ -1,11 +1,8 @@
 package com.starxg.browserfx;
 
-import javafx.util.Callback;
+import java.util.function.Consumer;
 
 import javax.swing.*;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * 浏览器接口

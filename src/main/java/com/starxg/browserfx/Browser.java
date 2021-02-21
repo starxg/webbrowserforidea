@@ -6,8 +6,9 @@ import java.awt.event.KeyListener;
 
 import javax.swing.*;
 
-import com.shopobot.util.URL;
 import org.apache.commons.lang3.StringUtils;
+
+import com.shopobot.util.URL;
 
 /**
  * 主面板

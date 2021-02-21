@@ -24,17 +24,18 @@ dependencies {
 }
 
 intellij {
-//    version '2018.3.6'
+    //    version '2018.3.6'
     version '2020.2.3'
 }
 
 patchPluginXml {
-    sinceBuild("173")
+    sinceBuild = '173'
+    untilBuild = ''
     changeNotes """
 <ol>
-<li>support jcef</li>
-<li>170.* - 202.2.* add <a href='https://github.com/Tencent/vConsole'>vConsole</a></li>
-<li>fix some bugs</li>
+<li>支持JCEF,根据IDE版本自动选择 (support JCEF,automatically select based on IDE version)</li>
+<li>2020.2以上版本使用JCEF,2020.2以下版本使用JavaFx WebView (2020.2+ use JCEF,2020.2- use JavaFX WebView)</li>
+<li>修复部分bug (fix some bugs)</li>
 </ol>
       """
 }
