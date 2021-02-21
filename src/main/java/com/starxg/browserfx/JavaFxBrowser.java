@@ -2,10 +2,13 @@ package com.starxg.browserfx;
 
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 import javax.swing.*;
+
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.ui.Messages;
+import com.sun.javafx.tk.Toolkit;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -15,7 +18,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
-import javafx.util.Callback;
 
 /**
  * javafx浏览器
@@ -29,9 +31,6 @@ class JavaFxBrowser implements BrowserView {
     private JFXPanel jfxPanel;
     private Consumer<Double> progressChangedConsumer;
     private Consumer<String> urlChangedConsumer;
-    private Consumer<String> alertConsumer;
-    private Callback<String, Boolean> confirmCallback;
-    private BiFunction<String, String, String> promptCallback;
 
     JavaFxBrowser() {
         jfxPanel = new JFXPanel();
@@ -71,21 +70,6 @@ class JavaFxBrowser implements BrowserView {
     }
 
     @Override
-    public void onAlert(Consumer<String> consumer) {
-        alertConsumer = Objects.requireNonNull(consumer, "consumer");
-    }
-
-    @Override
-    public void onConfirm(Callback<String, Boolean> callback) {
-        confirmCallback = Objects.requireNonNull(callback, "callback");
-    }
-
-    @Override
-    public void onPrompt(BiFunction<String, String, String> callback) {
-        promptCallback = Objects.requireNonNull(callback, "callback");
-    }
-
-    @Override
     public void onProgressChange(Consumer<Double> consumer) {
         progressChangedConsumer = Objects.requireNonNull(consumer, "consumer");
     }
@@ -122,6 +106,11 @@ class JavaFxBrowser implements BrowserView {
         return entryList.size() > 1 && history.getCurrentIndex() > 0;
     }
 
+    @Override
+    public void openDevTools() {
+
+    }
+
     private WebView getWebView() {
         if (!Platform.isFxApplicationThread()) {
             throw new IllegalThreadStateException();
@@ -142,23 +131,32 @@ class JavaFxBrowser implements BrowserView {
         });
 
         webEngine.setOnAlert(event -> {
-            if (Objects.nonNull(alertConsumer)) {
-                alertConsumer.accept(event.getData());
-            }
+            final Object key = new Object();
+            ApplicationManager.getApplication().invokeLater(() -> {
+                Messages.showMessageDialog(String.valueOf(event.getData()), webEngine.getLocation(), null);
+                Platform.runLater(() -> Toolkit.getToolkit().exitNestedEventLoop(key, null));
+            });
+            Toolkit.getToolkit().enterNestedEventLoop(key);
         });
 
         webEngine.setConfirmHandler(param -> {
-            if (Objects.isNull(confirmCallback)) {
-                return null;
-            }
-            return confirmCallback.call(param);
+            final Object key = new Object();
+            ApplicationManager.getApplication().invokeLater(() -> {
+                final boolean result = Messages.OK == Messages.showOkCancelDialog(String.valueOf(param),
+                        webEngine.getLocation(), "OK", "CANCEL", null);
+                Platform.runLater(() -> Toolkit.getToolkit().exitNestedEventLoop(key, result));
+            });
+            return (Boolean) Toolkit.getToolkit().enterNestedEventLoop(key);
         });
 
         webEngine.setPromptHandler(e -> {
-            if (Objects.isNull(promptCallback)) {
-                return null;
-            }
-            return promptCallback.apply(e.getMessage(), e.getDefaultValue());
+            final Object key = new Object();
+            ApplicationManager.getApplication().invokeLater(() -> {
+                final String result = Messages.showInputDialog(String.valueOf(e), webEngine.getLocation(), null,
+                        e.getDefaultValue(), null);
+                Platform.runLater(() -> Toolkit.getToolkit().exitNestedEventLoop(key, result));
+            });
+            return (String) Toolkit.getToolkit().enterNestedEventLoop(key);
         });
 
         return webView;

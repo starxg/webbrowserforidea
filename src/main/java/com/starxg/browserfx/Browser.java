@@ -6,12 +6,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.*;
 
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.ui.Messages;
 import com.shopobot.util.URL;
-import com.sun.javafx.tk.Toolkit;
-
-import javafx.application.Platform;
 
 /**
  * 主面板
@@ -78,35 +73,6 @@ class Browser extends JPanel {
             progressBar.setVisible(e != 1.0 && e != 0);
             progressBar.setValue((int) (e * 100));
         }));
-
-        webView.onAlert(e -> {
-            final Object key = new Object();
-            ApplicationManager.getApplication().invokeLater(() -> {
-                Messages.showMessageDialog(String.valueOf(e), txtUrl.getText(), null);
-                Platform.runLater(() -> Toolkit.getToolkit().exitNestedEventLoop(key, null));
-            });
-            Toolkit.getToolkit().enterNestedEventLoop(key);
-        });
-
-        webView.onConfirm(e -> {
-            final Object key = new Object();
-            ApplicationManager.getApplication().invokeLater(() -> {
-                final boolean result = Messages.OK == Messages.showOkCancelDialog(String.valueOf(e), txtUrl.getText(),
-                        null);
-                Platform.runLater(() -> Toolkit.getToolkit().exitNestedEventLoop(key, result));
-            });
-            return (Boolean) Toolkit.getToolkit().enterNestedEventLoop(key);
-        });
-
-        webView.onPrompt((msg, defaultValue) -> {
-            final Object key = new Object();
-            ApplicationManager.getApplication().invokeLater(() -> {
-                final String result = Messages.showInputDialog(String.valueOf(msg), txtUrl.getText(), null,
-                        defaultValue, null);
-                Platform.runLater(() -> Toolkit.getToolkit().exitNestedEventLoop(key, result));
-            });
-            return (String) Toolkit.getToolkit().enterNestedEventLoop(key);
-        });
 
         txtUrl.setText("http://127.0.0.1:8080");
         txtUrl.addKeyListener(new KeyListener() {

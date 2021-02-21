@@ -38,30 +38,6 @@ public interface BrowserView {
     void onUrlChange(Consumer<String> consumer);
 
     /**
-     * alert
-     * 
-     * @param consumer
-     *            consumer
-     */
-    void onAlert(Consumer<String> consumer);
-
-    /**
-     * confirm
-     * 
-     * @param callback
-     *            callback
-     */
-    void onConfirm(Callback<String, Boolean> callback);
-
-    /**
-     * prompt
-     * 
-     * @param callback
-     *            callback
-     */
-    void onPrompt(BiFunction<String, String, String> callback);
-
-    /**
      * 进度条改变通知
      * 
      * @param consumer
@@ -92,5 +68,10 @@ public interface BrowserView {
      * @return true：可以
      */
     boolean canForward();
+
+    /**
+     * 打开开发者工具
+     */
+    void openDevTools();
 
 }
