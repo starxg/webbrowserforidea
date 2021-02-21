@@ -6,6 +6,11 @@ import java.util.function.Consumer;
 
 import javax.swing.*;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.ui.Messages;
 import com.sun.javafx.tk.Toolkit;
@@ -108,7 +113,28 @@ class JavaFxBrowser implements BrowserView {
 
     @Override
     public void openDevTools() {
+        Document document = webEngine.getDocument();
+        if (Objects.isNull(document)) {
+            return;
+        }
 
+        NodeList heads = document.getElementsByTagName("head");
+        if (Objects.isNull(heads) || heads.getLength() == 0) {
+            return;
+        }
+
+        Node head = heads.item(0);
+
+        Element script = document.createElement("script");
+        script.setAttribute("type", "text/javascript");
+        script.setAttribute("src", "https://cdn.jsdelivr.net/gh/Tencent/vConsole@3.4.0/dist/vconsole.min.js");
+
+        Element console = document.createElement("script");
+        console.setAttribute("type", "text/javascript");
+        console.setTextContent("new VConsole()");
+
+        head.appendChild(script);
+        head.appendChild(console);
     }
 
     private WebView getWebView() {

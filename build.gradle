@@ -24,8 +24,8 @@ dependencies {
 }
 
 intellij {
-//    version '2018.3.6'
-    version '2020.2.3'
+    version '2018.3.6'
+//    version '2020.2.3'
 }
 
 patchPluginXml {
@@ -33,8 +33,9 @@ patchPluginXml {
     untilBuild("202.*")
     changeNotes """
 <ol>
+<li>support jcef</li>
+<li>add <a href='https://github.com/Tencent/vConsole'>vConsole</a></li>
 <li>fix some bugs</li>
-<li>add the <a href='https://github.com/Tencent/vConsole'>vConsole</a></li>
 </ol>
       """
 }
