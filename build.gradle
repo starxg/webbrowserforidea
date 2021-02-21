@@ -28,6 +28,10 @@ intellij {
     version '2020.2.3'
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
 patchPluginXml {
     sinceBuild = '173'
     untilBuild = ''

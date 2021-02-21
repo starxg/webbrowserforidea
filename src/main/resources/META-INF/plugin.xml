@@ -9,7 +9,7 @@
      <img width="400" height="263" src="https://cdn.jsdelivr.net/gh/starxg/webbrowserforidea@master/images/1.png" alt="Introduce Image" />
     ]]></description>
 
-    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.platform</depends>
 
 
     <extensions defaultExtensionNs="com.intellij">
