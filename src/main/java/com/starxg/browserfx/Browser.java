@@ -7,6 +7,7 @@ import java.awt.event.KeyListener;
 import javax.swing.*;
 
 import com.shopobot.util.URL;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 主面板
@@ -35,6 +36,14 @@ class Browser extends JPanel {
     private JPanel topControls() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
+        if (webView.type() == BrowserView.Type.JAVAFX) {
+            panel.add(new ControlButton("DevTools") {
+                {
+                    addActionListener(e -> webView.openDevTools());
+                    setToolTipText("DevTools");
+                }
+            });
+        }
         panel.add(txtUrl = new JTextField(), new GridBagConstraints() {
             {
                 weightx = 1;
@@ -42,13 +51,6 @@ class Browser extends JPanel {
             }
         });
         panel.add(btnGo = new ControlButton("Go"));
-        panel.add( new ControlButton("X") {
-            {
-                addActionListener(e -> {
-                    webView.openDevTools();
-                });
-            }
-        });
 
         return panel;
     }
@@ -68,6 +70,11 @@ class Browser extends JPanel {
         btnGo.addActionListener(e -> load(txtUrl.getText()));
 
         webView.onUrlChange(s -> swingInvokeLater(() -> {
+            if (StringUtils.isBlank(s) || "about:blank".equals(StringUtils.trim(s))) {
+                txtUrl.setText(StringUtils.EMPTY);
+                return;
+            }
+
             txtUrl.setText(s);
 
             // 没有获取焦点的时候光标回到0
@@ -103,10 +110,11 @@ class Browser extends JPanel {
     }
 
     private void load(String url) {
-        if (txtUrl.getText().trim().length() < 1) {
-            return;
+        try {
+            webView.load(URL.get(url).toJavaURL().toString());
+        } catch (Exception e) {
+            webView.load("about:blank");
         }
-        swingInvokeLater(() -> webView.load(URL.get(url).toJavaURL().toString()));
     }
 
     private static class ControlButton extends JButton {

@@ -6,11 +6,6 @@ import java.util.function.Consumer;
 
 import javax.swing.*;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.ui.Messages;
 import com.sun.javafx.tk.Toolkit;
@@ -23,6 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * javafx浏览器
@@ -36,6 +32,7 @@ class JavaFxBrowser implements BrowserView {
     private JFXPanel jfxPanel;
     private Consumer<Double> progressChangedConsumer;
     private Consumer<String> urlChangedConsumer;
+    private boolean isOpenDevTool = false;
 
     JavaFxBrowser() {
         jfxPanel = new JFXPanel();
@@ -113,8 +110,34 @@ class JavaFxBrowser implements BrowserView {
 
     @Override
     public void openDevTools() {
-        Platform.runLater(() -> webEngine.executeScript(
-                "!function () { if (typeof window.VConsole !== 'undefined') return; function n(){new VConsole();}; var script = document.createElement('script'); script.src = 'https://cdn.jsdelivr.net/gh/Tencent/vConsole@3.4.0/dist/vconsole.min.js'; script.type = 'text/javascript'; if (script.readyState) script.onreadystatechange = function () {if (script.readyState == 'loaded' || script.readyState == 'complete') n()}; else script.onload = n; document.body.appendChild(script); }();"));
+        String location = webEngine.getLocation();
+        if (Objects.isNull(webEngine.getDocument()) || StringUtils.isBlank(location)
+                || "about:blank".equals(location.trim())) {
+            return;
+        }
+
+        isOpenDevTool = !isOpenDevTool;
+        if (isOpenDevTool) {
+            doOpenDevTools();
+        } else {
+            executeScript(
+                    "typeof window.webbrowserforideaVConsole === 'object';window.webbrowserforideaVConsole.destroy();window.webbrowserforideaVConsole=null;");
+        }
+    }
+
+    private void doOpenDevTools() {
+        executeScript(
+                "!function () { function n(){window.webbrowserforideaVConsole = new VConsole();}; var script = document.createElement('script'); script.src = 'https://cdn.jsdelivr.net/gh/Tencent/vConsole@3.4.0/dist/vconsole.min.js'; script.type = 'text/javascript'; if (script.readyState) script.onreadystatechange = function () {if (script.readyState == 'loaded' || script.readyState == 'complete') n()}; else script.onload = n; document.body.appendChild(script); }();");
+    }
+
+    @Override
+    public void executeScript(String script) {
+        Platform.runLater(() -> webEngine.executeScript(script));
+    }
+
+    @Override
+    public Type type() {
+        return Type.JAVAFX;
     }
 
     private WebView getWebView() {
@@ -127,7 +150,12 @@ class JavaFxBrowser implements BrowserView {
             if (Objects.nonNull(progressChangedConsumer)) {
                 progressChangedConsumer.accept(newValue.doubleValue());
             }
+        });
 
+        webEngine.getLoadWorker().stateProperty().addListener((observableValue, state, newValue) -> {
+            if (isOpenDevTool) {
+                doOpenDevTools();
+            }
         });
 
         webEngine.locationProperty().addListener((observable, oldValue, newValue) -> {

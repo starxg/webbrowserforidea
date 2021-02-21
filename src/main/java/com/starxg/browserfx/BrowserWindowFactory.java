@@ -53,22 +53,20 @@ public class BrowserWindowFactory implements ToolWindowFactory {
     private JComponent getBrowser() {
 
         try {
-            BrowserView view;
             if (isSupportedJCEF()) {
-                view = (BrowserView) Class.forName("com.starxg.browserfx.JcefBrowser").newInstance();
+                return new Browser((BrowserView) Class.forName("com.starxg.browserfx.JcefBrowser").newInstance());
             } else if (isSupportedJavaFx()) {
-                view = (BrowserView) Class.forName("com.starxg.browserfx.JavaFxBrowser").newInstance();
-            } else {
-                JLabel label = new JLabel("JCEF or JavaFx is not supported in running IDE");
-                label.setHorizontalAlignment(SwingConstants.CENTER);
-                label.setVerticalAlignment(SwingConstants.TOP);
-                label.setBorder(JBUI.Borders.emptyTop(10));
-                return label;
+                return new Browser((BrowserView) Class.forName("com.starxg.browserfx.JavaFxBrowser").newInstance());
             }
-            return new Browser(view);
         } catch (Exception e) {
             Logger.getInstance(BrowserWindowFactory.class).error(e);
         }
-        return null;
+
+        JLabel label = new JLabel("JCEF or JavaFx is not supported in running IDE");
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setVerticalAlignment(SwingConstants.TOP);
+        label.setBorder(JBUI.Borders.emptyTop(10));
+
+        return label;
     }
 }

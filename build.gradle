@@ -24,8 +24,8 @@ dependencies {
 }
 
 intellij {
-    version '2018.3.6'
-//    version '2020.2.3'
+//    version '2018.3.6'
+    version '2020.2.3'
 }
 
 patchPluginXml {

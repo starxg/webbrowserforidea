@@ -74,4 +74,22 @@ public interface BrowserView {
      */
     void openDevTools();
 
+    /**
+     * 执行脚本
+     * 
+     * @param script
+     *            script
+     */
+    void executeScript(String script);
+
+    /**
+     * 实现类型
+     * 
+     * @return Type
+     */
+    Type type();
+
+    enum Type {
+        JAVAFX, JCEF
+    }
 }
