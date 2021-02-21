@@ -26,7 +26,6 @@ public class JcefBrowser implements BrowserView, Disposable {
     private JBCefBrowser browser;
     private CefBrowser cefBrowser;
     private CefClient cefClient;
-    private Consumer<Double> progressChangedConsumer;
     private Consumer<String> urlChangedConsumer;
 
     JcefBrowser() {
@@ -39,6 +38,9 @@ public class JcefBrowser implements BrowserView, Disposable {
             @Override
             public boolean onBeforePopup(CefBrowser browser, CefFrame frame, String targetUrl, String targetFrameName) {
                 load(targetUrl);
+                if (Objects.nonNull(urlChangedConsumer)) {
+                    urlChangedConsumer.accept(targetUrl);
+                }
                 return true;
             }
         }, cefBrowser);
@@ -62,7 +64,6 @@ public class JcefBrowser implements BrowserView, Disposable {
 
     @Override
     public void onProgressChange(Consumer<Double> consumer) {
-        progressChangedConsumer = Objects.requireNonNull(consumer, "consumer");
     }
 
     @Override

@@ -3,14 +3,18 @@ package com.starxg.browserfx;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
+import javax.swing.*;
+
 import org.jetbrains.annotations.NotNull;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.util.ReflectionUtil;
+import com.intellij.util.ui.JBUI;
 
 /**
  * 工厂
@@ -20,18 +24,14 @@ import com.intellij.util.ReflectionUtil;
  */
 public class BrowserWindowFactory implements ToolWindowFactory {
 
-    public BrowserWindowFactory() {
-
-    }
-
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        Content content = contentFactory.createContent(new Browser(getBrowser()), "", false);
+        Content content = contentFactory.createContent(getBrowser(), "", false);
         toolWindow.getContentManager().addContent(content);
     }
 
-    private boolean isSupportedJBCef() {
+    private boolean isSupportedJCEF() {
         try {
             Method method = ReflectionUtil.getDeclaredMethod(Class.forName("com.intellij.ui.jcef.JBCefApp"),
                     "isSupported");
@@ -41,14 +41,34 @@ public class BrowserWindowFactory implements ToolWindowFactory {
         }
     }
 
-    private BrowserView getBrowser() {
+    private boolean isSupportedJavaFx() {
         try {
-            if (isSupportedJBCef()) {
-                return (BrowserView) Class.forName("com.starxg.browserfx.JcefBrowser").newInstance();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            Class.forName("javafx.scene.web.WebView");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
         }
-        return new JavaFxBrowser();
+    }
+
+    private JComponent getBrowser() {
+
+        try {
+            BrowserView view;
+            if (isSupportedJCEF()) {
+                view = (BrowserView) Class.forName("com.starxg.browserfx.JcefBrowser").newInstance();
+            } else if (isSupportedJavaFx()) {
+                view = (BrowserView) Class.forName("com.starxg.browserfx.JavaFxBrowser").newInstance();
+            } else {
+                JLabel label = new JLabel("JCEF or JavaFx is not supported in running IDE");
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setVerticalAlignment(SwingConstants.TOP);
+                label.setBorder(JBUI.Borders.emptyTop(10));
+                return label;
+            }
+            return new Browser(view);
+        } catch (Exception e) {
+            Logger.getInstance(BrowserWindowFactory.class).error(e);
+        }
+        return null;
     }
 }

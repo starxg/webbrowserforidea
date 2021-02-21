@@ -39,7 +39,7 @@ public interface BrowserView {
 
     /**
      * 进度条改变通知
-     * 
+     *
      * @param consumer
      *            consumer
      */
@@ -57,14 +57,14 @@ public interface BrowserView {
 
     /**
      * 是否可以后退
-     * 
+     *
      * @return true：可以
      */
     boolean canBack();
 
     /**
      * 是否可以前进
-     * 
+     *
      * @return true：可以
      */
     boolean canForward();
