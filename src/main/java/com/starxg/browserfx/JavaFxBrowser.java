@@ -113,28 +113,8 @@ class JavaFxBrowser implements BrowserView {
 
     @Override
     public void openDevTools() {
-        Document document = webEngine.getDocument();
-        if (Objects.isNull(document)) {
-            return;
-        }
-
-        NodeList heads = document.getElementsByTagName("head");
-        if (Objects.isNull(heads) || heads.getLength() == 0) {
-            return;
-        }
-
-        Node head = heads.item(0);
-
-        Element script = document.createElement("script");
-        script.setAttribute("type", "text/javascript");
-        script.setAttribute("src", "https://cdn.jsdelivr.net/gh/Tencent/vConsole@3.4.0/dist/vconsole.min.js");
-
-        Element console = document.createElement("script");
-        console.setAttribute("type", "text/javascript");
-        console.setTextContent("new VConsole()");
-
-        head.appendChild(script);
-        head.appendChild(console);
+        Platform.runLater(() -> webEngine.executeScript(
+                "!function () { if (typeof window.VConsole !== 'undefined') return; function n(){new VConsole();}; var script = document.createElement('script'); script.src = 'https://cdn.jsdelivr.net/gh/Tencent/vConsole@3.4.0/dist/vconsole.min.js'; script.type = 'text/javascript'; if (script.readyState) script.onreadystatechange = function () {if (script.readyState == 'loaded' || script.readyState == 'complete') n()}; else script.onload = n; document.body.appendChild(script); }();"));
     }
 
     private WebView getWebView() {

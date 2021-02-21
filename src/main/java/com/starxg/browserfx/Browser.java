@@ -42,6 +42,13 @@ class Browser extends JPanel {
             }
         });
         panel.add(btnGo = new ControlButton("Go"));
+        panel.add( new ControlButton("X") {
+            {
+                addActionListener(e -> {
+                    webView.openDevTools();
+                });
+            }
+        });
 
         return panel;
     }
@@ -102,7 +109,7 @@ class Browser extends JPanel {
         swingInvokeLater(() -> webView.load(URL.get(url).toJavaURL().toString()));
     }
 
-    private static final class ControlButton extends JButton {
+    private static class ControlButton extends JButton {
         ControlButton(String text) {
             super(text);
             setMaximumSize(new Dimension(40, 25));
