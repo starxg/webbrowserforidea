@@ -6,7 +6,7 @@
     <description><![CDATA[
       <b>Embedded Web Browser for IDEA</b><br/>
       <p>An embedded browser.</p>
-     <img width="400" height="263" src="https://cdn.jsdelivr.net/gh/starxg/webbrowserforidea@ab5dddfbf2c49421496327793706a2463cb7dd95/images/1.png" alt="Introduce Image" />
+     <img width="400" height="263" src="https://cdn.jsdelivr.net/gh/starxg/webbrowserforidea@master/images/1.png" alt="Introduce Image" />
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
