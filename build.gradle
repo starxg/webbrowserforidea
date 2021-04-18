@@ -32,7 +32,7 @@ tasks.withType(JavaCompile) {
 }
 
 patchPluginXml {
-    sinceBuild = '173'
+    sinceBuild = '202.60'
     untilBuild = ''
     changeNotes """
 <ol>
