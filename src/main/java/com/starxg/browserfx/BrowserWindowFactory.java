@@ -31,16 +31,6 @@ public class BrowserWindowFactory implements ToolWindowFactory {
         toolWindow.getContentManager().addContent(content);
     }
 
-    private boolean isSupportedJCEF() {
-        try {
-            Method method = ReflectionUtil.getDeclaredMethod(Class.forName("com.intellij.ui.jcef.JBCefApp"),
-                    "isSupported");
-            return Objects.nonNull(method) && (boolean) method.invoke(null);
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
     private boolean isSupportedJavaFx() {
         try {
             Class.forName("javafx.scene.web.WebView");
@@ -53,16 +43,14 @@ public class BrowserWindowFactory implements ToolWindowFactory {
     private JComponent getBrowser() {
 
         try {
-            if (isSupportedJCEF()) {
-                return new Browser((BrowserView) Class.forName("com.starxg.browserfx.JcefBrowser").newInstance());
-            } else if (isSupportedJavaFx()) {
+            if (isSupportedJavaFx()) {
                 return new Browser((BrowserView) Class.forName("com.starxg.browserfx.JavaFxBrowser").newInstance());
             }
         } catch (Exception e) {
             Logger.getInstance(BrowserWindowFactory.class).error(e);
         }
 
-        JLabel label = new JLabel("JCEF or JavaFx is not supported in running IDE");
+        JLabel label = new JLabel("JavaFx is not supported in running IDE");
         label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setVerticalAlignment(SwingConstants.TOP);
         label.setBorder(JBUI.Borders.emptyTop(10));

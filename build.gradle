@@ -9,11 +9,11 @@ version '1.1.0'
 sourceCompatibility = 1.8
 
 repositories {
-    maven { url 'https://maven.aliyun.com/repository/central/'}
+    maven { url 'https://maven.aliyun.com/repository/central/' }
     maven { url 'https://maven.aliyun.com/repository/public/' }
     maven { url 'https://maven.aliyun.com/repository/google/' }
-    maven { url 'https://maven.aliyun.com/repository/jcenter/'}
-    maven { url 'https://maven.aliyun.com/repository/gradle-plugin'}
+    maven { url 'https://maven.aliyun.com/repository/jcenter/' }
+    maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
     maven { url 'https://jitpack.io' }
     //    mavenCentral()
 }
@@ -24,8 +24,8 @@ dependencies {
 }
 
 intellij {
-    //    version '2018.3.6'
-    version '2020.2.3'
+    version '2018.3.6'
+//    version '2020.2.3'
 }
 
 tasks.withType(JavaCompile) {
@@ -37,8 +37,6 @@ patchPluginXml {
     untilBuild = ''
     changeNotes """
 <ol>
-<li>支持JCEF,根据IDE版本自动选择 (support JCEF,automatically select based on IDE version)</li>
-<li>2020.2以上版本使用JCEF,2020.2以下版本使用JavaFx WebView (2020.2+ use JCEF,2020.2- use JavaFX WebView)</li>
 <li>修复部分bug (fix some bugs)</li>
 </ol>
       """
