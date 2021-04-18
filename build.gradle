@@ -39,4 +39,5 @@ patchPluginXml {
 <li>修复部分bug (fix some bugs)</li>
 </ol>
       """
+    
 }
