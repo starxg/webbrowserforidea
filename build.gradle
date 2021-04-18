@@ -33,7 +33,7 @@ tasks.withType(JavaCompile) {
 
 patchPluginXml {
     sinceBuild = '173'
-    untilBuild = ''
+    untilBuild = '202.59'
     changeNotes """
 <ol>
 <li>修复部分bug (fix some bugs)</li>
