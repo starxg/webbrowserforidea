@@ -21,6 +21,7 @@ class Browser extends JPanel {
     private JTextField txtUrl;
     private JButton btnGo;
     private JButton btnBack;
+    private JButton btnForward;
     private JProgressBar progressBar;
 
     Browser(BrowserView webView) {
@@ -46,7 +47,8 @@ class Browser extends JPanel {
 //                }
 //            });
 //        }
-        panel.add(btnBack = new ControlButton("Back"));
+        panel.add(btnBack = new ControlButton("←"));
+        panel.add(btnForward = new ControlButton("→"));
         panel.add(txtUrl = new JTextField(), new GridBagConstraints() {
             {
                 weightx = 1;
@@ -71,6 +73,7 @@ class Browser extends JPanel {
 
     private void initEvent() {
         btnBack.addActionListener(e -> webView.back());
+        btnForward.addActionListener(e -> webView.forward());
         btnGo.addActionListener(e -> load(txtUrl.getText()));
 
         webView.onUrlChange(s -> swingInvokeLater(() -> {
