@@ -35,10 +35,11 @@ jobs:
         java-version: '8'
         distribution: 'temurin'
     - name: Build with Gradle
+      id: build_gradle
       run: |
         chmod +x gradlew
         ./gradlew buildPlugin
-        ls -l ./build/distributions/
+        echo "release_package=$(ls ./build/distributions/ | grep -E .zip$ | grep -v grep | awk '{print $1}')" >> $GITHUB_OUTPUT
     - name: Create Version
       id: version
       run: |
@@ -58,8 +59,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./build/distributions/webbrowserforidea-1.1.1.zip
-        asset_name: webbrowserforidea.zip
+        asset_path: ./build/distributions/${{ steps.build_gradle.outputs.release_package }}
+        asset_name: ${{ steps.build_gradle.outputs.release_package }}
         asset_content_type: application/zip
     - uses: eregon/publish-release@v1
       env:
