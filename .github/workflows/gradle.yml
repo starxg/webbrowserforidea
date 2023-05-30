@@ -13,7 +13,7 @@ on:
       logLevel:
         description: 'Log level'
         required: true
-        default: 'info'
+        default: 'debug'
         type: choice
         options:
         - info
@@ -38,4 +38,4 @@ jobs:
     - name: Build with Gradle
       run: |
         chmod +x gradlew
-        ./gradlew idea
+        ./gradlew build
