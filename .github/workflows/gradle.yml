@@ -39,14 +39,18 @@ jobs:
         chmod +x gradlew
         ./gradlew buildPlugin
         ls -l ./build/distributions/
+    - name: Create Version
+      id: version
+      run: |
+        echo "dt=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_OUTPUT
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ steps.version.outputs.dt }}
+        release_name: Release ${{ steps.version.outputs.dt }}
         draft: false
         prerelease: false
     - uses: actions/upload-release-asset@v1.0.1
