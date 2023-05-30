@@ -42,7 +42,7 @@ jobs:
     - name: Create Version
       id: version
       run: |
-        echo "dt=$(date +'%Y-%m-%dT%H:%M:%S')" >> $GITHUB_OUTPUT
+        echo "dt=$(date +'%Y-%m-%dT%H-%M-%S')" >> $GITHUB_OUTPUT
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
