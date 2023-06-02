@@ -1,0 +1,69 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'debug'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+
+permissions: write-all
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 8
+      uses: actions/setup-java@v3
+      with:
+        java-version: '8'
+        distribution: 'temurin'
+    - name: Build with Gradle
+      id: build_gradle
+      run: |
+        chmod +x gradlew
+        ./gradlew buildPlugin
+        echo "release_package=$(ls ./build/distributions/ | grep -E .zip$ | grep -v grep | awk '{print $1}')" >> $GITHUB_OUTPUT
+    - name: Create Version
+      id: version
+      run: |
+        echo "dt=$(date +'%Y-%m-%dT%H-%M-%SZ')" >> $GITHUB_OUTPUT
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.dt }}
+        release_name: Release ${{ steps.version.outputs.dt }}
+        draft: false
+        prerelease: false
+    - uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./build/distributions/${{ steps.build_gradle.outputs.release_package }}
+        asset_name: ${{ steps.build_gradle.outputs.release_package }}
+        asset_content_type: application/zip
+    - uses: eregon/publish-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        release_id: ${{ steps.create_release.outputs.id }}
